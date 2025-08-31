@@ -25,8 +25,8 @@ mongoose.connect(config.mongoURL, { useNewUrlParser: true })
 })
 
 
-app.use(bodyParser.json({ extended: true, limit: "" }));
-app.use(bodyParser.urlencoded({ extended: true, limit: "200mb" })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json({ extended: true, limit: "100gb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "100gb" })); // for parsing application/x-www-form-urlencoded
 app.use(methodOverride());
 app.use(cookieParser());
 
