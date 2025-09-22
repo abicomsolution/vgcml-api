@@ -584,15 +584,19 @@ function Controller() {
                     }
                     var newMonthlyUnilevel = MUnilevel(data);
                     newMonthlyUnilevel.save()
-                    .then((result1) => {
-                        if (err) {
-                            console.log(err)
-                            cb(err)
-                        } else {
-                            cb()
-                        }
+                    .then(() => {
+                       cb()
                     })
+                    .catch((error) => {
+                        console.log(error)
+                        cb()
+                    })
+
                 }
+            })
+            .catch((error) => {
+                console.log(error)
+                cb()
             })
         }
 
@@ -635,8 +639,17 @@ function Controller() {
                                     header_id = result1._id
                                     resolve()
                                 })
+                                .catch((error) => {
+                                    console.log(error)
+                                    resolve()
+                                })
                             }                            
-                        });
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                            resolve()
+                        })
+                        
                     })
                 }
 
@@ -656,8 +669,11 @@ function Controller() {
                         .then((result1) => {                        
                             updateMonthlyUnilevelBalance(sponsor, purch.transdate, () => {
                                 resolve()
-                            })
-                          
+                            })                          
+                        })
+                        .catch((error) => {
+                            console.log(error)                        
+                            resolve()
                         })
                     })
                 }
@@ -701,6 +717,11 @@ function Controller() {
                             var _err = { name: "No header" };
                             reject(_err);
                         }
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        var _err = { name: "Something went wring" };
+                        reject(_err);
                     })
                 })
             }
@@ -917,6 +938,10 @@ function Controller() {
                             resolve()
                         }
                         
+                    })
+                    .catch((error) => {
+                        console.log(error)                        
+                        resolve()
                     })
                 })
             }
