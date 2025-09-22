@@ -49,7 +49,7 @@ function Controller() {
                         dealers_price: e.dealer_price?e.dealer_price:0,
                         resellers_price: e.reseller_price?e.reseller_price:0,
                     }
-                    // console.log(data)
+                    console.log(e.codenum)
                     // next()  
                     var newPurchases = Purchases(data);
                     newPurchases.save()
@@ -74,10 +74,16 @@ function Controller() {
                         })       
                     })
                 }, function (err) {
-                    checkUpdateProcessStatus(body.sender_id, () => {    
-                        console.log("Process done")   
+                    if (!err){
+                        checkUpdateProcessStatus(body.sender_id, () => {    
+                            console.log("Process done")   
+                            icb()           
+                        })                    
+                    }else{
+                        console.log(err)
                         icb()           
-                    })                    
+                    }
+                    
                 })                                            
             })
         }
@@ -89,6 +95,7 @@ function Controller() {
             }
 
             if (acctype>1){
+                console.log("not qualified")
                 icb(immSponsor)
             }else{
 
@@ -564,7 +571,7 @@ function Controller() {
                 if (result) {
                     cb()
                 } else {
-                    console.log("-create header 2-")
+                    // console.log("-create header 2-")
                     var data = {
                         member_id: id,
                         nmonth: nMonth,
@@ -606,11 +613,11 @@ function Controller() {
                         MUnilevel.findOne({ member_id: new ObjectId(sponsor), nmonth: nMonth, nyear: nYear })
                         .then((result) => {                                                     
                             if (result) {
-                                console.log("--found header---")
+                                // console.log("--found header---")
                                 header_id = result._id
                                 resolve()
                             } else {
-                                console.log("-create header-")
+                                // console.log("-create header-")
                                 var data = {
                                     member_id: sponsor,
                                     nmonth: nMonth,
@@ -635,7 +642,7 @@ function Controller() {
 
                 const savePoints = function () {
                     return new Promise(function (resolve, reject) {
-                        console.log("savePoints", header_id, points)
+                        // console.log("savePoints", header_id, points)
                         var data = {
                             monthly_unilevel_id: header_id,
                             order_id: null,
@@ -648,8 +655,9 @@ function Controller() {
                         newMUDetails.save()
                         .then((result1) => {                        
                             updateMonthlyUnilevelBalance(sponsor, purch.transdate, () => {
+                                resolve()
                             })
-                            resolve()
+                          
                         })
                     })
                 }
@@ -669,7 +677,7 @@ function Controller() {
         
         function updateMonthlyUnilevelBalance(id, transdate, cb) {
 
-            console.log("updateMonthlyUnilevelBalance....." + id)
+            // console.log("updateMonthlyUnilevelBalance....." + id)
             var header = null
 
             var balance = {
